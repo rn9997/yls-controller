@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Next‑Life Loot — Controllers & Merch</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head><body>
+<header class="header"><div class="container nav">
+  <div class="logo"><span class="badge">✨</span>Next‑Life Loot</div>
+  <nav class="row" style="gap:10px">
+    <a class="btn ghost" href="index.html">Home</a>
+    <a class="btn ghost" href="shop.html">Shop</a>
+    <a class="btn ghost" href="contact.html">Contact</a>
+    <a class="btn" href="cart.html">🛒 <span id="cartMini">0 • $0.00</span></a>
+  </nav>
+  <div class="grow"></div>
+  <select id="ccy" class="select" style="width:auto">
+    <option value="BHD">BHD د.ب</option>
+    <option value="USD">USD $</option>
+    <option value="EUR">EUR €</option>
+    <option value="GBP">GBP £</option>
+  </select>
+</div></header>
+
+<section class="container hero">
+  <div>
+    <h1 style="font-size:clamp(28px,5vw,48px);line-height:1.1;margin:0">Second‑hand Controllers & Merch — 
+      <span style="background:linear-gradient(90deg,#7c83ff,#ff3ea5);-webkit-background-clip:text;background-clip:text;color:transparent">curated, tested, affordable.</span>
+    </h1>
+    <p class="small" style="margin-top:8px">Give great gear a second life. Everything is cleaned, checked, and ready to roll.</p>
+    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:8px">
+      <span class="badge">🛡 14‑day warranty</span><span class="badge">🚚 Local pickup</span><span class="badge">♻️ Sustainable</span>
+    </div>
+    <div style="margin-top:14px">
+      <a class="btn primary" href="shop.html">Browse the shop</a>
+      <a class="btn" href="contact.html">Sell your gear</a>
+    </div>
+  </div>
+  <div class="card pimg"><img src="https://images.unsplash.com/photo-1605901309584-818e25960a8b?q=80&w=1600&auto=format&fit=crop" alt="Controllers"></div>
+</section>
+
+<section class="container">
+  <h2>Featured</h2>
+  <div id="feat" class="grid"></div>
+</section>
+
+<footer class="footer">© <span id="year"></span> Next‑Life Loot • Manama, BH</footer>
+<script src="assets/app.js"></script>
+<script>
+(async function(){
+  bindHeader();
+  const data = await loadProducts();
+  const feat = document.getElementById('feat');
+  const ccy = STORE.getCurrency();
+  for(const p of data.slice(0,3)){
+    const card = document.createElement('article');
+    card.className='card';
+    card.innerHTML = `
+      <div class="pimg"><img src="${p.img}" alt="${p.name}"></div>
+      <div class="container" style="padding:12px">
+        <div class="ptitle">${p.name}</div>
+        <div class="pmeta">${p.notes}</div>
+        <div class="row spread" style="margin-top:8px">
+          <strong>${moneyUSDTo(ccy, p.priceUSD)}</strong>
+          <div class="row" style="gap:6px">
+            <a class="btn ghost" href="product.html?id=${p.id}">Details</a>
+            <button class="btn primary" data-add="${p.id}">Add</button>
+          </div>
+        </div>
+      </div>`;
+    card.querySelector('[data-add]').addEventListener('click', ()=>{ STORE.add(p.id,1); document.dispatchEvent(new Event('cart:updated')); });
+    feat.appendChild(card);
+  }
+  document.addEventListener('currency:changed', ()=> location.reload());
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+</body></html>

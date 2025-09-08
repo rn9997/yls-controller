@@ -1,0 +1,59 @@
+[
+  {
+    "id": "ps5",
+    "name": "DualSense PS5 Controller (White)",
+    "priceUSD": 26.5,
+    "condition": "Very Good",
+    "stock": 3,
+    "category": "controllers",
+    "img": "https://images.unsplash.com/photo-1605901309584-818e25960a8b?q=80&w=1200&auto=format&fit=crop",
+    "notes": "Cleaned, tested; includes USB\u2011C cable",
+    "tags": [
+      "PS5",
+      "Wireless",
+      "Refurb"
+    ]
+  },
+  {
+    "id": "xbox",
+    "name": "Xbox Series Controller (Carbon Black)",
+    "priceUSD": 24.0,
+    "condition": "Good",
+    "stock": 5,
+    "category": "controllers",
+    "img": "https://images.unsplash.com/photo-1614292252779-5d0a68e27c56?q=80&w=1200&auto=format&fit=crop",
+    "notes": "Light scuffs; battery door intact",
+    "tags": [
+      "Xbox",
+      "Bluetooth"
+    ]
+  },
+  {
+    "id": "tee",
+    "name": "Graphic Tee \u2014 Retro GG",
+    "priceUSD": 12.0,
+    "condition": "New",
+    "stock": 7,
+    "category": "merch",
+    "img": "https://images.unsplash.com/photo-1592878849124-9a9d7b4a0d53?q=80&w=1200&auto=format&fit=crop",
+    "notes": "100% cotton, black",
+    "tags": [
+      "Unisex",
+      "Printed"
+    ]
+  },
+  {
+    "id": "hoodie",
+    "name": "Hoodie \u2014 Pixel Wave",
+    "priceUSD": 22.0,
+    "condition": "New",
+    "stock": 4,
+    "category": "merch",
+    "img": "https://images.unsplash.com/photo-1520975898319-8ce8a61f09ca?q=80&w=1200&auto=format&fit=crop",
+    "notes": "Fleece\u2011lined, cozy fit",
+    "tags": [
+      "Unisex",
+      "Hoodie"
+    ]
+  }
+]
