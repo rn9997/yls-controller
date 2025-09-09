@@ -29,7 +29,7 @@
   },
   {
     "id": "tee-retro",
-    "name": "Graphic Tee — Retro Wave",
+    "name": "Gaming Keyboard",
     "priceUSD": 19.00,
     "condition": "New",
     "stock": 12,
@@ -44,14 +44,14 @@
     "notes": "100% cotton, screen-printed graphic."
   },
   {
-    "id": "hoodie-pixel",
-    "name": "Pullover Hoodie — Pixel Drift",
+    "id": "Gaming Mouse",
+    "name": "Razor Mouse",
     "priceUSD": 35.00,
     "condition": "New",
     "stock": 9,
     "category": "Merch",
-    "tags": ["Hoodie", "Unisex"],
-    "img": "https://images.unsplash.com/photo-1520975898319-8ce8a61f09ca?q=80&w=1200&auto=format&fit=crop",
+    "tags": ["Gaming", "Aura"],
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxfglQVFM8S84oB7gsqVCS5hooPvzfvAkXuA&s",
     "images": [
       "https://images.unsplash.com/photo-1520975898319-8ce8a61f09ca?q=80&w=1600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1484516758160-69878111a911?q=80&w=1600&auto=format&fit=crop",
