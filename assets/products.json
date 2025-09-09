@@ -2,7 +2,7 @@
   {
     "id": "ps5-white",
     "name": "DualSense PS5 Controller — Glacier White",
-    "priceUSD": 29.00,
+    "priceUSD": 29.0,
     "condition": "Very Good",
     "stock": 5,
     "category": "Controllers",
@@ -16,7 +16,7 @@
   {
     "id": "xbox-black",
     "name": "Xbox Series Controller — Carbon Black",
-    "priceUSD": 27.00,
+    "priceUSD": 27.0,
     "condition": "Good",
     "stock": 7,
     "category": "Controllers",
@@ -30,11 +30,11 @@
   {
     "id": "tee-retro",
     "name": "Gaming Keyboard",
-    "priceUSD": 19.00,
+    "priceUSD": 19.0,
     "condition": "New",
     "stock": 12,
     "category": "Merch",
-    "tags": ["Gaming", "Aura" ,],
+    "tags": ["Gaming", "Aura"],
     "img": "https://images.ctfassets.net/w5r1fvmogo3f/2Sx0d0xP1sqQ4lqnNghSTr/f7fc939bbb9f196bdd62805af0642dd6/3f91bf6de6ad4e3ca3c86bd3b46264c5.jpg?fm=webp&q=90&fit=scale&w=1920",
     "images": [
       "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1600&auto=format&fit=crop",
@@ -46,11 +46,11 @@
   {
     "id": "Gaming Mouse",
     "name": "Razor Mouse",
-    "priceUSD": 35.00,
+    "priceUSD": 35.0,
     "condition": "New",
     "stock": 9,
     "category": "Merch",
-    "tags": ["Gaming", "Aura" ,],
+    "tags": ["Gaming", "Aura"],
     "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxfglQVFM8S84oB7gsqVCS5hooPvzfvAkXuA&s",
     "images": [
       "https://images.unsplash.com/photo-1520975898319-8ce8a61f09ca?q=80&w=1600&auto=format&fit=crop",
@@ -62,7 +62,7 @@
   {
     "id": "cap-logo",
     "name": "6-Panel Cap — LS Logo",
-    "priceUSD": 16.00,
+    "priceUSD": 16.0,
     "condition": "New",
     "stock": 15,
     "category": "Merch",
