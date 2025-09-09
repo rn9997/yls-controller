@@ -455,6 +455,8 @@
     .ptitle{ font-size:16px }
   }
 }
+<link rel="stylesheet" href="style.css">
+
 
 /* ---------------------- Notes ----------------------
 - Badges: <span class="badge hot">Limited</span> / <span class="badge ok">In stock</span>
