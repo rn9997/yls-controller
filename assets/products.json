@@ -34,8 +34,8 @@
     "condition": "New",
     "stock": 12,
     "category": "Merch",
-    "tags": ["T-Shirt", "Unisex"],
-    "img": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop",
+    "tags": ["Gaming", "Aura",],
+    "img": "https://images.ctfassets.net/w5r1fvmogo3f/2Sx0d0xP1sqQ4lqnNghSTr/f7fc939bbb9f196bdd62805af0642dd6/3f91bf6de6ad4e3ca3c86bd3b46264c5.jpg?fm=webp&q=90&fit=scale&w=1920",
     "images": [
       "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1518232606160-9f2d2b1f5b48?q=80&w=1600&auto=format&fit=crop",
