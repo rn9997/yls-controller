@@ -1,57 +1,27 @@
-[
-  {
+ {
     "id": "ps5",
     "name": "DualSense PS5 Controller (White)",
+    "priceUSD": 26.5,
     "priceUSD": 80 USD ,
     "condition": "Very Good",
     "stock": 3,
     "category": "controllers",
-    "img": "https://cdn.mos.cms.futurecdn.net/pA7qJMdjyPdV4PRtTkTPoT.jpg",
-    "notes": "Cleaned, tested; includes USB\u2011C cable",
+@@ -57,3 +57,18 @@
+    ]
+  }
+]
+[
+  {
+    "id": "Razor Mouse",
+    "name": "DualSense PS5 Controller (White)",
+    "priceUSD": 90 USD ,
+    "condition": "Very Good",
+    "stock": 1,
+    "category": "merch",
+    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIlyELXMTCkgXzNnwVfkGUGRsrqjybEBD4BQ&s",
+    "notes": "Brand New Quality In Box,
     "tags": [
       "PS5",
       "Wireless",
       "Refurb"
-    ]
-  },
-  {
-    "id": "xbox",
-    "name": "Xbox Series Controller (Carbon Black)",
-    "priceUSD": 24.0,
-    "condition": "Good",
-    "stock": 5,
-    "category": "controllers",
-    "img": "https://images.ctfassets.net/16nm6vz43ids/35L0Sv8qp6XoXPIqEuN12d/89151b0c37d5c5743f32c6097d73d6db/How_to_connect_Xbox_controller_to_PC.jpg?fm=webp&q=65" ,
-    "notes": "Light scuffs; battery door intact",
-    "tags": [
-      "Xbox",
-      "Bluetooth"
-    ]
-  },
-  {
-    "id": "tee",
-    "name": "Gaming Keyboard",
-    "priceUSD": 12.0,
-    "condition": "New",
-    "stock": 7,
-    "category": "merch",
-    "img": "https://images.ctfassets.net/w5r1fvmogo3f/2Sx0d0xP1sqQ4lqnNghSTr/f7fc939bbb9f196bdd62805af0642dd6/3f91bf6de6ad4e3ca3c86bd3b46264c5.jpg?fm=webp&q=90&fit=scale&w=1920",
-    "notes": "RBG Keyboard",
-    "tags": [
-      "Unisex",
-      "Printed"
-    ]
-  },
-  {
-    "id": "hoodie",
-    "name": "Hoodie \u2014 Pixel Wave",
-    "priceUSD": 22.0,
-    "condition": "New",
-    "stock": 4,
-    "category": "merch",
-    "img": "https://media.gettyimages.com/id/1469392615/video/4k-glowing-red-neon-text-coming-soon.jpg?s=640x640&k=20&c=oW_S8E2w38QU9XPuND-U9lDYQPGuuH2wfefgWEvm7U0=",
-    "notes": "Fleece\u2011lined, cozy fit",
-    "tags": [
-      "Unisex",
-      "Hoodie"
     ]
