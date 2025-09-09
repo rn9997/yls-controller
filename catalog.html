@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LocalSweat — Catalog</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head><body>
+<header class="header"><div class="container nav">
+  <div class="logo"><span class="mark">LS</span>LocalSweat</div>
+  <nav class="row" style="gap:10px"><a class="btn ghost" href="index.html">Home</a><a class="btn ghost" href="catalog.html">Catalog</a><a class="btn ghost" href="contact.html">Contact</a><a class="btn" href="cart.html">🛒 <span id="cartMini">0 • $0.00</span></a></nav>
+  <div class="grow"></div><select id="ccy" class="select"><option>USD</option><option>BHD</option><option>EUR</option><option>GBP</option></select>
+</div></header>
+
+<main class="container">
+  <h1>Catalog</h1>
+  <div class="row" style="gap:10px;flex-wrap:wrap;margin-bottom:10px">
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="all">All</button>
+      <button class="tab" data-tab="Controllers">Controllers</button>
+      <button class="tab" data-tab="Merch">Merch</button>
+    </div>
+    <div class="grow"></div>
+    <input id="q" class="input" placeholder="Search…">
+    <select id="sort" class="select">
+      <option value="popular">Popular</option>
+      <option value="price-asc">Price ↑</option>
+      <option value="price-desc">Price ↓</option>
+      <option value="name">Name</option>
+    </select>
+  </div>
+  <div id="grid" class="grid"></div>
+  <p id="empty" class="small" style="display:none;text-align:center;padding:18px">No items match.</p>
+</main>
+
+<footer class="footer">© <span id="year"></span> LocalSweat</footer>
+<script src="assets/app.js"></script>
+<script>
+(async function(){
+  bindHeader();
+  const data = await loadProducts();
+  const grid=document.getElementById('grid'), empty=document.getElementById('empty');
+  let tab='all', q='', sort='popular';
+  const ccy = ()=> STORE.getCurrency();
+
+  function apply(){
+    grid.innerHTML='';
+    let items = data.filter(p=> (tab==='all'||p.category===tab) && (!q || (p.name+' '+p.notes).toLowerCase().includes(q)));
+    if(sort==='price-asc') items.sort((a,b)=>a.priceUSD-b.priceUSD);
+    if(sort==='price-desc') items.sort((a,b)=>b.priceUSD-a.priceUSD);
+    if(sort==='name') items.sort((a,b)=>a.name.localeCompare(b.name));
+    empty.style.display = items.length? 'none':'block';
+    for(const p of items){
+      const card=document.createElement('article'); card.className='card';
+      card.innerHTML=`
+        <a href="product.html?id=${p.id}"><div class="pimg"><img src="${p.img}" alt="${p.name}"></div></a>
+        <div class="pad"><div class="ptitle">${p.name}</div><div class="pmeta">${p.notes}</div>
+        <div class="row spread" style="margin-top:8px"><strong>${toMoney(ccy(), p.priceUSD)}</strong>
+        <div class="row" style="gap:6px"><a class="btn ghost" href="product.html?id=${p.id}">Details</a><button class="btn primary" data-add="${p.id}">Add</button></div></div></div>`;
+      card.querySelector('[data-add]').onclick=()=>STORE.add(p.id,1);
+      grid.appendChild(card);
+    }
+  }
+  document.getElementById('q').oninput=e=>{ q=e.target.value.toLowerCase(); apply(); };
+  document.getElementById('sort').onchange=e=>{ sort=e.target.value; apply(); };
+  document.getElementById('tabs').onclick=e=>{ if(e.target.matches('.tab')){ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); e.target.classList.add('active'); tab=e.target.dataset.tab; apply(); } };
+  document.addEventListener('currency:changed', apply);
+  apply();
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+</body></html>
