@@ -9,9 +9,8 @@
     "tags":["PS5","Wireless","USB-C"],
     "img":"https://images.unsplash.com/photo-1605901309584-818e25960a8b?q=80&w=1200&auto=format&fit=crop",
     "images":[
-      "https://images.unsplash.com/photo-1605901309584-818e25960a8b?q=80&w=1600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1614292252779-5d0a68e27c56?q=80&w=1600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1618498082410-b4e6356f2a58?q=80&w=1600&auto=format&fit=crop"
+      "https://images.pushsquare.com/9eda88d7c0c55/dualsense-ps5-controller-colours-guide.900x.jpg",
+
     ],
     "notes":"Cleaned, tested; includes USB-C cable."
   },
@@ -23,11 +22,10 @@
     "stock":7,
     "category":"Controllers",
     "tags":["Xbox","Bluetooth"],
-    "img":"https://images.unsplash.com/photo-1587202372775-98927b92c3d3?q=80&w=1200&auto=format&fit=crop",
+    "img":"https://assets.xboxservices.com/assets/f2/7e/f27e66e9-2412-45a5-8303-b57aecafe9c4.jpg?n=Xbox-Wireless-Controller_Image-Hero-1084_Deep-Pink_1920x831_02.jpg",
     "images":[
-      "https://images.unsplash.com/photo-1587202372775-98927b92c3d3?q=80&w=1600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1585079542156-2755d9a3dc74?q=80&w=1600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1526738549149-8e07eca6c147?q=80&w=1600&auto=format&fit=crop"
+      "https://assets.xboxservices.com/assets/f2/7e/f27e66e9-2412-45a5-8303-b57aecafe9c4.jpg?n=Xbox-Wireless-Controller_Image-Hero-1084_Deep-Pink_1920x831_02.jpg",
+  
     ],
     "notes":"Light scuffs; battery door intact."
   },
