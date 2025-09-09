@@ -1,79 +1,77 @@
 [
   {
-    "id":"ps5-white",
-    "name":"DualSense PS5 Controller — Glacier White",
-    "priceUSD":29.00,
-    "condition":"Very Good",
-    "stock":5,
-    "category":"Controllers",
-    "tags":["PS5","Wireless","USB-C"],
-    "img":"https://images.unsplash.com/photo-1605901309584-818e25960a8b?q=80&w=1200&auto=format&fit=crop",
-    "images":[
-      "https://images.pushsquare.com/9eda88d7c0c55/dualsense-ps5-controller-colours-guide.900x.jpg",
-
+    "id": "ps5-white",
+    "name": "DualSense PS5 Controller — Glacier White",
+    "priceUSD": 29.00,
+    "condition": "Very Good",
+    "stock": 5,
+    "category": "Controllers",
+    "tags": ["PS5", "Wireless", "USB-C", "featured"],
+    "img": "https://images.unsplash.com/photo-1605901309584-818e25960a8b?q=80&w=1200&auto=format&fit=crop",
+    "images": [
+      "https://images.pushsquare.com/9eda88d7c0c55/dualsense-ps5-controller-colours-guide.900x.jpg"
     ],
-    "notes":"Cleaned, tested; includes USB-C cable."
+    "notes": "Cleaned, tested; includes USB-C cable."
   },
   {
-    "id":"xbox-black",
-    "name":"Xbox Series Controller — Carbon Black",
-    "priceUSD":27.00,
-    "condition":"Good",
-    "stock":7,
-    "category":"Controllers",
-    "tags":["Xbox","Bluetooth"],
-    "img":"https://assets.xboxservices.com/assets/f2/7e/f27e66e9-2412-45a5-8303-b57aecafe9c4.jpg?n=Xbox-Wireless-Controller_Image-Hero-1084_Deep-Pink_1920x831_02.jpg",
-    "images":[
-      "https://assets.xboxservices.com/assets/f2/7e/f27e66e9-2412-45a5-8303-b57aecafe9c4.jpg?n=Xbox-Wireless-Controller_Image-Hero-1084_Deep-Pink_1920x831_02.jpg",
-  
+    "id": "xbox-black",
+    "name": "Xbox Series Controller — Carbon Black",
+    "priceUSD": 27.00,
+    "condition": "Good",
+    "stock": 7,
+    "category": "Controllers",
+    "tags": ["Xbox", "Bluetooth", "featured"],
+    "img": "https://assets.xboxservices.com/assets/f2/7e/f27e66e9-2412-45a5-8303-b57aecafe9c4.jpg?n=Xbox-Wireless-Controller_Image-Hero-1084_Deep-Pink_1920x831_02.jpg",
+    "images": [
+      "https://assets.xboxservices.com/assets/f2/7e/f27e66e9-2412-45a5-8303-b57aecafe9c4.jpg?n=Xbox-Wireless-Controller_Image-Hero-1084_Deep-Pink_1920x831_02.jpg"
     ],
-    "notes":"Light scuffs; battery door intact."
+    "notes": "Light scuffs; battery door intact."
   },
   {
-    "id":"tee-retro",
-    "name":"Graphic Tee — Retro Wave",
-    "priceUSD":19.00,
-    "condition":"New",
-    "stock":12,
-    "category":"Merch",
-    "tags":["T-Shirt","Unisex"],
-    "img":"https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop",
-    "images":[
+    "id": "tee-retro",
+    "name": "Graphic Tee — Retro Wave",
+    "priceUSD": 19.00,
+    "condition": "New",
+    "stock": 12,
+    "category": "Merch",
+    "tags": ["T-Shirt", "Unisex"],
+    "img": "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop",
+    "images": [
       "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1518232606160-9f2d2b1f5b48?q=80&w=1600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1600&auto=format&fit=crop"
     ],
-    "notes":"100% cotton, screen-printed graphic."
+    "notes": "100% cotton, screen-printed graphic."
   },
   {
-    "id":"hoodie-pixel",
-    "name":"Pullover Hoodie — Pixel Drift",
-    "priceUSD":35.00,
-    "condition":"New",
-    "stock":9,
-    "category":"Merch",
-    "tags":["Hoodie","Unisex"],
-    "img":"https://images.unsplash.com/photo-1520975898319-8ce8a61f09ca?q=80&w=1200&auto=format&fit=crop",
-    "images":[
+    "id": "hoodie-pixel",
+    "name": "Pullover Hoodie — Pixel Drift",
+    "priceUSD": 35.00,
+    "condition": "New",
+    "stock": 9,
+    "category": "Merch",
+    "tags": ["Hoodie", "Unisex"],
+    "img": "https://images.unsplash.com/photo-1520975898319-8ce8a61f09ca?q=80&w=1200&auto=format&fit=crop",
+    "images": [
       "https://images.unsplash.com/photo-1520975898319-8ce8a61f09ca?q=80&w=1600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1484516758160-69878111a911?q=80&w=1600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1503342217505-b0a15cf70489?q=80&w=1600&auto=format&fit=crop"
     ],
-    "notes":"Fleece-lined, relaxed fit."
+    "notes": "Fleece-lined, relaxed fit."
   },
   {
-    "id":"cap-logo",
-    "name":"6-Panel Cap — LS Logo",
-    "priceUSD":16.00,
-    "condition":"New",
-    "stock":15,
-    "category":"Merch",
-    "tags":["Cap","Adjustable"],
-    "img":"https://images.unsplash.com/photo-1516826957135-700dedea698c?q=80&w=1200&auto=format&fit=crop",
-    "images":[
+    "id": "cap-logo",
+    "name": "6-Panel Cap — LS Logo",
+    "priceUSD": 16.00,
+    "condition": "New",
+    "stock": 15,
+    "category": "Merch",
+    "tags": ["Cap", "Adjustable"],
+    "img": "https://images.unsplash.com/photo-1516826957135-700dedea698c?q=80&w=1200&auto=format&fit=crop",
+    "images": [
       "https://images.unsplash.com/photo-1516826957135-700dedea698c?q=80&w=1600&auto=format&fit=crop",
       "https://images.unsplash.com/photo-1475189778702-5ec9941484ae?q=80&w=1600&auto=format&fit=crop"
     ],
-    "notes":"Curved brim, metal buckle."
+    "notes": "Curved brim, metal buckle."
   }
 ]
