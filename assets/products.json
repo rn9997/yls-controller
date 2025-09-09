@@ -1,74 +1,81 @@
 [
   {
-    "id": "ps5",
-    "name": "DualSense PS5 Controller (White)",
-    "priceUSD": 80 USD ,
-    "condition": "Very Good",
-    "stock": 3,
-    "category": "controllers",
-    "img": "https://cdn.mos.cms.futurecdn.net/pA7qJMdjyPdV4PRtTkTPoT.jpg",
-    "notes": "Cleaned, tested; includes USB\u2011C cable",
-    "tags": [
-      "PS5",
-      "Wireless",
-      "Refurb"
-    ]
+    "id":"ps5-white",
+    "name":"DualSense PS5 Controller — Glacier White",
+    "priceUSD":29.00,
+    "condition":"Very Good",
+    "stock":5,
+    "category":"Controllers",
+    "tags":["PS5","Wireless","USB-C"],
+    "img":"https://images.unsplash.com/photo-1605901309584-818e25960a8b?q=80&w=1200&auto=format&fit=crop",
+    "images":[
+      "https://images.unsplash.com/photo-1605901309584-818e25960a8b?q=80&w=1600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1614292252779-5d0a68e27c56?q=80&w=1600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1618498082410-b4e6356f2a58?q=80&w=1600&auto=format&fit=crop"
+    ],
+    "notes":"Cleaned, tested; includes USB-C cable."
   },
   {
-    "id": "xbox",
-    "name": "Xbox Series Controller (Carbon Black)",
-    "priceUSD": 24.0,
-    "condition": "Good",
-    "stock": 5,
-    "category": "controllers",
-    "img": "https://images.ctfassets.net/16nm6vz43ids/35L0Sv8qp6XoXPIqEuN12d/89151b0c37d5c5743f32c6097d73d6db/How_to_connect_Xbox_controller_to_PC.jpg?fm=webp&q=65" ,
-    "notes": "Light scuffs; battery door intact",
-    "tags": [
-      "Xbox",
-      "Bluetooth"
-    ]
+    "id":"xbox-black",
+    "name":"Xbox Series Controller — Carbon Black",
+    "priceUSD":27.00,
+    "condition":"Good",
+    "stock":7,
+    "category":"Controllers",
+    "tags":["Xbox","Bluetooth"],
+    "img":"https://images.unsplash.com/photo-1587202372775-98927b92c3d3?q=80&w=1200&auto=format&fit=crop",
+    "images":[
+      "https://images.unsplash.com/photo-1587202372775-98927b92c3d3?q=80&w=1600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1585079542156-2755d9a3dc74?q=80&w=1600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1526738549149-8e07eca6c147?q=80&w=1600&auto=format&fit=crop"
+    ],
+    "notes":"Light scuffs; battery door intact."
   },
   {
-    "id": "tee",
-    "name": "Gaming Keyboard",
-    "priceUSD": 12.0,
-    "condition": "New",
-    "stock": 7,
-    "category": "merch",
-    "img": "https://images.ctfassets.net/w5r1fvmogo3f/2Sx0d0xP1sqQ4lqnNghSTr/f7fc939bbb9f196bdd62805af0642dd6/3f91bf6de6ad4e3ca3c86bd3b46264c5.jpg?fm=webp&q=90&fit=scale&w=1920",
-    "notes": "RBG Keyboard",
-    "tags": [
-      "Unisex",
-      "Printed"
-    ]
+    "id":"tee-retro",
+    "name":"Graphic Tee — Retro Wave",
+    "priceUSD":19.00,
+    "condition":"New",
+    "stock":12,
+    "category":"Merch",
+    "tags":["T-Shirt","Unisex"],
+    "img":"https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200&auto=format&fit=crop",
+    "images":[
+      "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1518232606160-9f2d2b1f5b48?q=80&w=1600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1600&auto=format&fit=crop"
+    ],
+    "notes":"100% cotton, screen-printed graphic."
   },
   {
-    "id": "hoodie",
-    "name": "Hoodie \u2014 Pixel Wave",
-    "priceUSD": 22.0,
-    "condition": "New",
-    "stock": 4,
-    "category": "merch",
-    "img": "https://media.gettyimages.com/id/1469392615/video/4k-glowing-red-neon-text-coming-soon.jpg?s=640x640&k=20&c=oW_S8E2w38QU9XPuND-U9lDYQPGuuH2wfefgWEvm7U0=",
-    "notes": "Fleece\u2011lined, cozy fit",
-    "tags": [
-      "Unisex",
-      "Hoodie"
-    ]
+    "id":"hoodie-pixel",
+    "name":"Pullover Hoodie — Pixel Drift",
+    "priceUSD":35.00,
+    "condition":"New",
+    "stock":9,
+    "category":"Merch",
+    "tags":["Hoodie","Unisex"],
+    "img":"https://images.unsplash.com/photo-1520975898319-8ce8a61f09ca?q=80&w=1200&auto=format&fit=crop",
+    "images":[
+      "https://images.unsplash.com/photo-1520975898319-8ce8a61f09ca?q=80&w=1600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1484516758160-69878111a911?q=80&w=1600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1503342217505-b0a15cf70489?q=80&w=1600&auto=format&fit=crop"
+    ],
+    "notes":"Fleece-lined, relaxed fit."
+  },
+  {
+    "id":"cap-logo",
+    "name":"6-Panel Cap — LS Logo",
+    "priceUSD":16.00,
+    "condition":"New",
+    "stock":15,
+    "category":"Merch",
+    "tags":["Cap","Adjustable"],
+    "img":"https://images.unsplash.com/photo-1516826957135-700dedea698c?q=80&w=1200&auto=format&fit=crop",
+    "images":[
+      "https://images.unsplash.com/photo-1516826957135-700dedea698c?q=80&w=1600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1475189778702-5ec9941484ae?q=80&w=1600&auto=format&fit=crop"
+    ],
+    "notes":"Curved brim, metal buckle."
   }
 ]
-[
-  {
-    "id": "Razor Mouse",
-    "name": "DualSense PS5 Controller (White)",
-    "priceUSD": 90 USD ,
-    "condition": "Very Good",
-    "stock": 1,
-    "category": "merch",
-    "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIlyELXMTCkgXzNnwVfkGUGRsrqjybEBD4BQ&s",
-    "notes": "Brand New Quality In Box,
-    "tags": [
-      "PS5",
-      "Wireless",
-      "Refurb"
-    ]
