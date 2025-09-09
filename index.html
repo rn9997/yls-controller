@@ -116,5 +116,72 @@
   document.addEventListener('cart:changed', renderDrawer);
   document.getElementById('year').textContent = new Date().getFullYear();
 })();
+<script src="assets/app.js"></script>
+<script>
+/* Featured section renderer:
+   - If any product has "featured": true or a tag "featured", we use those.
+   - Otherwise we fall back to the first 4 products.
+*/
+(async function renderFeaturedSection(){
+  try{
+    // Make sure header/cart mini etc. still bind
+    bindHeader?.();
+
+    const products = await loadProducts();
+    const ccy = () => STORE.getCurrency();
+
+    // 1) Pick featured products
+    let featured = products.filter(p => p.featured === true || (p.tags||[]).some(t => /featured/i.test(t)));
+    if (featured.length === 0) {
+      // fallback: first 4 items
+      featured = products.slice(0, 4);
+    }
+
+    // 2) Render cards
+    const grid = document.getElementById('featured-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    for (const p of featured) {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.innerHTML = `
+        <a href="product.html?id=${p.id}">
+          <div class="pimg"><img src="${p.img}" alt="${p.name}"></div>
+        </a>
+        <div class="pad">
+          <div class="ptitle">${p.name}</div>
+          <div class="pmeta">${p.notes || ''}</div>
+          <div class="row" style="gap:6px;margin-top:8px">
+            ${(p.tags||[]).slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}
+          </div>
+          <div class="row spread" style="margin-top:10px">
+            <strong class="price">${toMoney(ccy(), p.priceUSD)}</strong>
+            <div class="row" style="gap:6px">
+              <a class="btn ghost" href="product.html?id=${p.id}">Details</a>
+              <button class="btn primary" data-add="${p.id}">Add</button>
+            </div>
+          </div>
+        </div>
+      `;
+      card.querySelector('[data-add]').onclick = () => STORE.add(p.id, 1);
+      grid.appendChild(card);
+    }
+
+    // 3) Re-render prices when currency changes
+    document.addEventListener('currency:changed', () => {
+      // Just rebuild prices quickly
+      [...grid.querySelectorAll('.card')].forEach((card, i) => {
+        const p = featured[i];
+        const priceEl = card.querySelector('.price');
+        if (priceEl) priceEl.textContent = toMoney(ccy(), p.priceUSD);
+      });
+    });
+  } catch (err){
+    console.error('Featured render error:', err);
+  }
+})();
+</script>
+
 </script>
 </body></html>
