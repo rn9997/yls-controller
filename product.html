@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LocalSweat — Product</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head><body>
+<header class="header"><div class="container nav">
+  <div class="logo"><span class="mark">LS</span>LocalSweat</div>
+  <nav class="row" style="gap:10px"><a class="btn ghost" href="index.html">Home</a><a class="btn ghost" href="catalog.html">Catalog</a><a class="btn ghost" href="contact.html">Contact</a><a class="btn" href="cart.html">🛒 <span id="cartMini">0 • $0.00</span></a></nav>
+  <div class="grow"></div><select id="ccy" class="select"><option>USD</option><option>BHD</option><option>EUR</option><option>GBP</option></select>
+</div></header>
+
+<main class="container">
+  <div class="row" style="gap:16px;flex-wrap:wrap">
+    <div style="flex:1;min-width:260px" class="card pad">
+      <div class="gallery">
+        <div class="gallery-main"><img id="mainImg" alt="" style="width:100%;height:auto;display:block"></div>
+        <div class="gallery-thumbs" id="thumbs"></div>
+        <div class="row" style="justify-content:space-between"><button id="prev" class="btn">‹ Prev</button><button id="next" class="btn">Next ›</button></div>
+      </div>
+    </div>
+    <div style="flex:1;min-width:260px" class="card pad">
+      <h1 id="pName" style="margin:0 0 6px"></h1>
+      <div id="pNotes" class="pmeta"></div>
+      <div style="height:8px"></div>
+      <div class="row" style="gap:8px;align-items:center">
+        <strong id="pPrice"></strong>
+        <span id="pCond" class="badge"></span>
+        <span id="pStock" class="small"></span>
+      </div>
+      <div style="height:12px"></div>
+      <div class="row" style="gap:8px">
+        <button id="add" class="btn primary">Add to cart</button>
+        <a href="cart.html" class="btn">Go to cart</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">© <span id="year"></span> LocalSweat</footer>
+<script src="assets/app.js"></script>
+<script>
+(async function(){
+  bindHeader();
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  const data = await loadProducts();
+  const p = data.find(x=>x.id===id) || data[0];
+  const ccy = STORE.getCurrency();
+
+  document.title = p.name + ' — LocalSweat';
+  document.getElementById('pName').textContent = p.name;
+  document.getElementById('pNotes').textContent = p.notes;
+  document.getElementById('pPrice').textContent = toMoney(ccy, p.priceUSD);
+  document.getElementById('pCond').textContent = p.condition;
+  document.getElementById('pStock').textContent = p.stock>0? 'In stock' : 'Out of stock';
+
+  const g = buildGallery(p.images && p.images.length?p.images:[p.img], 'mainImg', 'thumbs');
+  document.getElementById('prev').onclick=()=>g.prev();
+  document.getElementById('next').onclick=()=>g.next();
+
+  document.getElementById('add').onclick=()=>{ STORE.add(p.id,1); };
+  document.addEventListener('currency:changed', ()=> location.reload());
+  document.getElementById('year').textContent = new Date().getFullYear();
+})();
+</script>
+</body></html>
