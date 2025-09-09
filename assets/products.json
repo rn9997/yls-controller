@@ -50,7 +50,7 @@
     "condition": "New",
     "stock": 9,
     "category": "Merch",
-    "tags": ["Gaming", "Aura"],
+    "tags": ["Gaming", "Aura" ,],
     "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxfglQVFM8S84oB7gsqVCS5hooPvzfvAkXuA&s",
     "images": [
       "https://images.unsplash.com/photo-1520975898319-8ce8a61f09ca?q=80&w=1600&auto=format&fit=crop",
