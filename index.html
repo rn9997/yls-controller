@@ -1,202 +1,126 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LocalSweat — Home</title>
-<link rel="stylesheet" href="assets/styles.css">
-</head><body>
-<header class="header"><div class="container nav">
-  <div class="logo"><span class="mark">LS</span>LocalSweat</div>
-  <nav class="row" style="gap:10px">
-    <a class="btn ghost" href="index.html">Home</a>
-    <a class="btn ghost" href="catalog.html">Catalog</a>
-    <a class="btn ghost" href="contact.html">Contact</a>
-    <a class="btn" href="cart.html">🛒 <span id="cartMini">0 • $0.00</span></a>
-  </nav>
-  <div class="grow"></div>
-  <select id="ccy" class="select" style="width:auto"><option>USD</option><option>BHD</option><option>EUR</option><option>GBP</option></select>
-</div></header>
-
-<section class="container hero">
-  <div>
-    <h1 style="font-size:clamp(28px,5vw,48px);line-height:1.1;margin:0">Second-hand Heat. New-level Care.</h1>
-    <p class="small" style="margin-top:8px">Controllers & street merch, curated and tested. Affordable, sustainable, and ready to ship.</p>
-    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:8px">
-      <a class="btn primary" href="catalog.html">Shop all</a>
-      <a class="btn" href="catalog.html#Controllers">Controllers</a>
-      <a class="btn" href="catalog.html#Merch">Merch</a>
-    </div>
-    <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:12px">
-      <span class="badge">🛡 14-day warranty</span><span class="badge">🚚 Local pickup</span><span class="badge">♻️ Sustainable</span>
-    </div>
-  </div>
-  <div class="card pimg"><img src="https://eu.aimcontrollers.com/wp-content/uploads/2023/09/3-3.jpg"></div>
-</section>
-
-<section class="container">
-  <h2>Featured</h2>
-  <!-- FEATURED -->
-<section class="container" id="featured-section">
-  <div class="row spread" style="margin-bottom:8px">
-    <h2 style="margin:0">Featured</h2>
-    <a class="btn ghost" href="catalog.html">Shop all →</a>
-  </div>
-  <div id="featured-grid" class="grid"></div>
-</section>
-
-  <div id="grid" class="grid"></div>
-</section>
-
-<div class="overlay" onclick="closeDrawer()"></div>
-<aside class="drawer">
-  <div class="pad row spread"><strong>Cart</strong><button class="btn ghost" onclick="closeDrawer()">✕</button></div>
-  <div id="drawerItems" style="flex:1;overflow:auto;padding:0 12px 12px"></div>
-  <div class="pad" style="border-top:1px solid var(--line)">
-    <div class="row spread"><span class="small">Subtotal</span><strong id="subtotal">$0.00</strong></div>
-    <div style="height:8px"></div>
-    <a class="btn primary" href="cart.html">Checkout</a>
-  </div>
-</aside>
-
-<footer class="footer">© <span id="year"></span> LocalSweat</footer>
-<script src="assets/app.js"></script>
-<script>
-(async function(){
-  bindHeader();
-  const data = await loadProducts();
-  const grid = document.getElementById('grid');
-  const ccy = ()=> STORE.getCurrency();
-
-  function render(){
-    grid.innerHTML='';
-    data.slice(0,4).forEach(p=>{
-      const card = document.createElement('article');
-      card.className='card';
-      card.innerHTML = `
-        <a href="product.html?id=${p.id}">
-          <div class="pimg"><img src="${p.img}" alt="${p.name}"></div>
-        </a>
-        <div class="pad">
-          <div class="ptitle">${p.name}</div>
-          <div class="pmeta">${p.notes}</div>
-          <div class="row spread" style="margin-top:8px">
-            <strong>${toMoney(ccy(), p.priceUSD)}</strong>
-            <div class="row" style="gap:6px">
-              <a class="btn ghost" href="product.html?id=${p.id}">Details</a>
-              <button class="btn primary" data-add="${p.id}">Add</button>
-            </div>
-          </div>
-        </div>`;
-      card.querySelector('[data-add]').onclick=()=>{ STORE.add(p.id,1); };
-      grid.appendChild(card);
-    });
-  }
-  document.addEventListener('currency:changed', render);
-  render();
-
-  async function renderDrawer(){
-    const cart = STORE.getCart(); const products = data; const ccy = STORE.getCurrency();
-    const wrap = document.getElementById('drawerItems'); wrap.innerHTML=''; let subUSD=0;
-    for(const [id,qty] of Object.entries(cart)){
-      const p = products.find(x=>x.id===id); if(!p) continue; const lineUSD = p.priceUSD*qty; subUSD+=lineUSD;
-      const row = document.createElement('div');
-      row.className='row'; row.style="gap:10px;border-bottom:1px solid var(--line);padding:10px 0";
-      row.innerHTML = \`
-        <img src="\${p.img}" alt="" style="width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--line)">
-        <div class="grow"><div style="font-weight:600">\${p.name}</div><div class="small">\${p.condition}</div>
-          <input type="number" min="1" value="\${qty}" class="input" style="width:80px;margin-top:6px">
-        </div>
-        <div>\${toMoney(ccy, lineUSD)}</div>
-        <button class="btn ghost">Remove</button>\`;
-      row.querySelector('input').onchange=e=>{ STORE.setQty(id,e.target.value); renderDrawer(); };
-      row.querySelector('button').onclick=()=>{ STORE.remove(id); renderDrawer(); };
-      wrap.appendChild(row);
-    }
-    document.getElementById('subtotal').textContent = toMoney(STORE.getCurrency(), subUSD);
-  }
-  renderDrawer();
-  document.addEventListener('cart:changed', renderDrawer);
-  document.getElementById('year').textContent = new Date().getFullYear();
-})();
-<script src="assets/app.js"></script>
-<script>
-/* Featured section renderer:
-   - If any product has "featured": true or a tag "featured", we use those.
-   - Otherwise we fall back to the first 4 products.
-*/
-(async function renderFeaturedSection(){
-  try{
-    // Make sure header/cart mini etc. still bind
-    bindHeader?.();
-
-    const products = await loadProducts();
-    const ccy = () => STORE.getCurrency();
-
-    // 1) Pick featured products
-    let featured = products.filter(p => p.featured === true || (p.tags||[]).some(t => /featured/i.test(t)));
-    if (featured.length === 0) {
-      // fallback: first 4 items
-      featured = products.slice(0, 4);
-    }
-
-    // 2) Render cards
-    const grid = document.getElementById('featured-grid');
-    if (!grid) return;
-    grid.innerHTML = '';
-
-    for (const p of featured) {
-      const card = document.createElement('article');
-      card.className = 'card';
-      card.innerHTML = `
-        <a href="product.html?id=${p.id}">
-          <div class="pimg"><img src="${p.img}" alt="${p.name}"></div>
-        </a>
-        <div class="pad">
-          <div class="ptitle">${p.name}</div>
-          <div class="pmeta">${p.notes || ''}</div>
-          <div class="row" style="gap:6px;margin-top:8px">
-            ${(p.tags||[]).slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}
-          </div>
-          <div class="row spread" style="margin-top:10px">
-            <strong class="price">${toMoney(ccy(), p.priceUSD)}</strong>
-            <div class="row" style="gap:6px">
-              <a class="btn ghost" href="product.html?id=${p.id}">Details</a>
-              <button class="btn primary" data-add="${p.id}">Add</button>
-            </div>
-          </div>
-        </div>
-      `;
-      card.querySelector('[data-add]').onclick = () => STORE.add(p.id, 1);
-      grid.appendChild(card);
-    }
-
-    // 3) Re-render prices when currency changes
-    document.addEventListener('currency:changed', () => {
-      // Just rebuild prices quickly
-      [...grid.querySelectorAll('.card')].forEach((card, i) => {
-        const p = featured[i];
-        const priceEl = card.querySelector('.price');
-        if (priceEl) priceEl.textContent = toMoney(ccy(), p.priceUSD);
-      });
-    });
-  } catch (err){
-    console.error('Featured render error:', err);
-  }
-})();
-</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Local Sweat — Pro Gamer Store</title>
-  <link rel="stylesheet" href="style.css"> <!-- connects to CSS -->
-  <script src="app.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LocalSweat — Home</title>
+
+  <!-- SEO basics -->
+  <meta name="description" content="Controllers & street merch, curated and tested. Affordable, sustainable, and ready to ship." />
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <!-- Favicons (optional)
+  <link rel="icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  -->
 </head>
 <body>
-  <!-- all your HTML sections go here -->
+
+  <!-- Skip link for screen readers -->
+  <a href="#main" class="sr-only">Skip to content</a>
+
+  <!-- Header / Nav -->
+  <header class="header" role="banner">
+    <div class="container nav" aria-label="Primary">
+      <div class="logo">
+        <span class="badge" aria-hidden="true">LS</span>
+        <span>LocalSweat</span>
+      </div>
+
+      <nav class="row" style="gap:10px" aria-label="Main navigation">
+        <a class="btn ghost" href="index.html" aria-current="page">Home</a>
+        <a class="btn ghost" href="catalog.html">Catalog</a>
+        <a class="btn ghost" href="contact.html">Contact</a>
+        <button class="btn" type="button" onclick="OPEN_CART?.()">
+          🛒 <span id="cartMini" aria-live="polite">0 • $0.00</span>
+        </button>
+      </nav>
+
+      <div class="grow" aria-hidden="true"></div>
+
+      <label for="ccy" class="sr-only">Currency</label>
+      <select id="ccy" class="select" style="width:auto">
+        <option>USD</option><option>BHD</option><option>EUR</option><option>GBP</option>
+      </select>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="container hero" aria-labelledby="hero-title">
+      <div>
+        <h1 id="hero-title" class="headline">Second-hand Heat. <span class="gradient">New-level Care.</span></h1>
+        <p class="pmeta" style="margin-top:8px">Controllers & street merch, curated and tested. Affordable, sustainable, and ready to ship.</p>
+
+        <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:12px">
+          <a class="btn primary" href="catalog.html">Shop all</a>
+          <a class="btn" href="catalog.html#Controllers">Controllers</a>
+          <a class="btn" href="catalog.html#Merch">Merch</a>
+        </div>
+
+        <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:12px">
+          <span class="badge">🛡 14-day warranty</span>
+          <span class="badge">🚚 Local pickup</span>
+          <span class="badge">♻️ Sustainable</span>
+        </div>
+      </div>
+
+      <div class="card pimg" aria-hidden="true">
+        <img
+          src="https://eu.aimcontrollers.com/wp-content/uploads/2023/09/3-3.jpg"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+    </section>
+
+    <!-- Featured (personalized by assets/app.js) -->
+    <section class="container" id="featured-section" aria-labelledby="featured-title">
+      <div class="row spread" style="margin-bottom:8px">
+        <h2 id="featured-title" class="headline">Featured</h2>
+        <a class="btn ghost" href="catalog.html">Shop all →</a>
+      </div>
+      <div id="featured-grid" class="grid" aria-live="polite"></div>
+    </section>
+
+    <!-- New / Latest (simple preview; app.js sample renderer fills first 4) -->
+    <section class="container" aria-labelledby="latest-title">
+      <h2 id="latest-title" class="headline">Latest Drops</h2>
+      <div id="grid" class="grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <!-- Overlay + Drawer cart -->
+  <div class="overlay" onclick="CLOSE_CART?.()" aria-hidden="true"></div>
+  <aside class="drawer" aria-label="Mini cart" aria-hidden="true">
+    <div class="pad row spread">
+      <strong>Cart</strong>
+      <button class="btn ghost" type="button" onclick="CLOSE_CART?.()" aria-label="Close cart">✕</button>
+    </div>
+
+    <div id="drawerItems" style="flex:1;overflow:auto;padding:0 12px 12px"></div>
+
+    <div class="pad" style="border-top:1px solid var(--line)">
+      <div class="row spread">
+        <span class="small">Subtotal</span>
+        <strong id="subtotal">$0.00</strong>
+      </div>
+      <div style="height:8px"></div>
+      <a class="btn primary" href="cart.html">Checkout</a>
+    </div>
+  </aside>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    © <span id="year"></span> LocalSweat
+  </footer>
+
+  <!-- Scripts -->
+  <script src="assets/app.js"></script>
+  <script>
+    // Year stamp; everything else (header, featured, mini cart, drawer) is handled in assets/app.js
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
-
-
-
-</script>
-</body></html>
