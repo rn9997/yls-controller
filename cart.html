@@ -1,74 +1,200 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Your Cart — Next‑Life Loot</title>
-<link rel="stylesheet" href="assets/styles.css">
-</head><body>
-<header class="header"><div class="container nav">
-  <div class="logo"><span class="badge">✨</span>Next‑Life Loot</div>
-  <nav class="row" style="gap:10px">
-    <a class="btn ghost" href="index.html">Home</a>
-    <a class="btn ghost" href="shop.html">Shop</a>
-    <a class="btn ghost" href="contact.html">Contact</a>
-  </nav>
-  <div class="grow"></div>
-  <select id="ccy" class="select" style="width:auto">
-    <option value="BHD">BHD د.ب</option><option value="USD">USD $</option><option value="EUR">EUR €</option><option value="GBP">GBP £</option>
-  </select>
-</div></header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your Cart — Next-Life Loot</title>
+  <meta name="description" content="Review your items, adjust quantities, and proceed to checkout." />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav">
+      <div class="logo"><span class="badge" aria-hidden="true">✨</span>Next-Life Loot</div>
 
-<main class="container">
-  <h1 style="margin:6px 0 12px">Your Cart</h1>
-  <table class="table" id="table"><thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th><th></th></tr></thead><tbody></tbody></table>
-  <p id="empty" class="small" style="display:none">Your cart is empty.</p>
-  <div class="row" style="justify-content:flex-end;gap:12px;margin-top:10px">
-    <div class="card pad">
-      <div class="row spread"><span class="small">Subtotal</span><strong id="subtotal">$0.00</strong></div>
-      <div class="row spread"><span class="small">VAT (demo)</span><span id="vat" class="small">$0.00</span></div>
-      <hr style="border:none;border-top:1px solid var(--line);margin:8px 0">
-      <div class="row spread"><span class="small">Total</span><strong id="grand">$0.00</strong></div>
-      <div style="height:8px"></div>
-      <button class="btn primary" disabled id="checkout">Checkout (coming soon)</button>
-      <p class="small">Payment integration will be added later (Stripe / PayPal / Tabby).</p>
+      <nav class="row" style="gap:10px" aria-label="Main navigation">
+        <a class="btn ghost" href="index.html">Home</a>
+        <a class="btn ghost" href="shop.html">Shop</a>
+        <a class="btn ghost" href="contact.html">Contact</a>
+      </nav>
+
+      <div class="grow" aria-hidden="true"></div>
+
+      <label for="ccy" class="sr-only">Currency</label>
+      <select id="ccy" class="select" style="width:auto">
+        <option value="BHD">BHD د.ب</option>
+        <option value="USD">USD $</option>
+        <option value="EUR">EUR €</option>
+        <option value="GBP">GBP £</option>
+      </select>
     </div>
-  </div>
-</main>
+  </header>
 
-<footer class="footer">© <span id="year"></span> Next‑Life Loot</footer>
-<script src="assets/app.js"></script>
-<script>
-(async function(){
-  bindHeader();
-  const data = await loadProducts();
-  const ccy = STORE.getCurrency();
-  const cart = STORE.getCart();
-  const tbody = document.querySelector('#table tbody');
-  function render(){
-    tbody.innerHTML='';
-    let any=false, subUSD=0;
-    for(const [id,qty] of Object.entries(STORE.getCart())){
-      const p = data.find(x=>x.id===id); if(!p) continue;
-      any=true; const row = document.createElement('tr');
-      const lineUSD = p.priceUSD * qty; subUSD += lineUSD;
-      row.innerHTML = `
-        <td><div class="row"><img src="${p.img}" alt="${p.name}" style="width:56px;height:56px;object-fit:cover;border-radius:8px"><div><div style="font-weight:600">${p.name}</div><div class="small">${p.condition}</div></div></div></td>
-        <td><input type="number" min="1" value="${qty}" style="width:70px" class="input"></td>
-        <td>${moneyUSDTo(ccy, p.priceUSD)}</td>
-        <td>${moneyUSDTo(ccy, lineUSD)}</td>
-        <td><button class="btn ghost">Remove</button></td>`;
-      row.querySelector('input').addEventListener('change', e=>{ STORE.setQty(id, e.target.value); document.dispatchEvent(new Event('cart:updated')); render(); });
-      row.querySelector('button').addEventListener('click', ()=>{ STORE.remove(id); document.dispatchEvent(new Event('cart:updated')); render(); });
-      tbody.appendChild(row);
-    }
-    document.getElementById('empty').style.display = any? 'none':'block';
-    const vatUSD = subUSD * 0.00; // demo VAT
-    document.getElementById('subtotal').textContent = moneyUSDTo(ccy, subUSD);
-    document.getElementById('vat').textContent = moneyUSDTo(ccy, vatUSD);
-    document.getElementById('grand').textContent = moneyUSDTo(ccy, subUSD + vatUSD);
-    document.getElementById('checkout').disabled = !any;
-  }
-  document.addEventListener('currency:changed', render);
-  render();
-  document.getElementById('year').textContent = new Date().getFullYear();
-})();
-</script>
-</body></html>
+  <!-- Main -->
+  <main class="container" id="main">
+    <h1 class="headline" style="margin:6px 0 12px">Your Cart</h1>
+
+    <div id="emptyState" class="notice" style="display:none">
+      <p class="small" style="margin:0">
+        Your cart is empty. <a class="btn primary" href="shop.html" style="margin-left:10px">Continue shopping</a>
+      </p>
+    </div>
+
+    <div class="max" style="overflow:auto">
+      <table class="table" id="cartTable" aria-describedby="cartTotals">
+        <colgroup>
+          <col style="width:52%"><!-- Item -->
+          <col style="width:12%"><!-- Qty -->
+          <col style="width:18%"><!-- Price -->
+          <col style="width:18%"><!-- Total -->
+          <col><!-- Actions -->
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Qty</th>
+            <th scope="col">Price</th>
+            <th scope="col">Total</th>
+            <th scope="col"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Summary -->
+    <section class="row" style="justify-content:flex-end;gap:12px;margin-top:10px">
+      <div class="card pad" id="cartTotals" aria-live="polite">
+        <div class="row spread">
+          <span class="small">Subtotal</span>
+          <strong id="subtotal">$0.00</strong>
+        </div>
+        <div class="row spread">
+          <span class="small">VAT (demo)</span>
+          <span id="vat" class="small">$0.00</span>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--line);margin:8px 0">
+        <div class="row spread">
+          <span class="small">Total</span>
+          <strong id="grand">$0.00</strong>
+        </div>
+        <div class="row" style="gap:8px;margin-top:10px">
+          <button class="btn ghost" id="clearCart">Clear cart</button>
+          <button class="btn primary" disabled id="checkout">Checkout (coming soon)</button>
+        </div>
+        <p class="small" style="margin-top:6px">Payment integration will be added later (Stripe / PayPal / Tabby).</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">© <span id="year"></span> Next-Life Loot</footer>
+
+  <!-- App script -->
+  <script src="assets/app.js"></script>
+  <script>
+    (async function initCartPage(){
+      // Header bindings (currency select + mini cart updates)
+      bindHeader?.();
+
+      const products = await loadProducts();
+      const tableBody = document.querySelector('#cartTable tbody');
+      const emptyState = document.getElementById('emptyState');
+
+      const els = {
+        subtotal: document.getElementById('subtotal'),
+        vat:      document.getElementById('vat'),
+        grand:    document.getElementById('grand'),
+        clear:    document.getElementById('clearCart'),
+        checkout: document.getElementById('checkout'),
+      };
+
+      const VAT_RATE = 0.00; // demo; set per-region when you enable taxes
+
+      // Render one row
+      function renderRow(p, qty){
+        const tr = document.createElement('tr');
+        const priceUSD = Number(p.priceUSD) || 0;
+        const lineUSD  = priceUSD * qty;
+
+        tr.innerHTML = `
+          <td>
+            <div class="row" style="gap:10px">
+              <img src="${p.img}" alt="${p.name}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--line)">
+              <div>
+                <div style="font-weight:600">${p.name}</div>
+                <div class="small">${p.condition || ''}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <label class="sr-only" for="qty-${p.id}">Quantity for ${p.name}</label>
+            <input id="qty-${p.id}" type="number" min="1" value="${qty}" inputmode="numeric" pattern="[0-9]*" class="input" style="width:80px">
+          </td>
+          <td data-price>${toMoney(STORE.getCurrency(), priceUSD)}</td>
+          <td data-line>${toMoney(STORE.getCurrency(), lineUSD)}</td>
+          <td><button class="btn ghost" data-remove>Remove</button></td>
+        `;
+
+        // quantity change
+        const qtyInput = tr.querySelector('input[type="number"]');
+        qtyInput.addEventListener('change', (e) => {
+          const v = Math.max(1, Number(e.target.value) || 1);
+          e.target.value = v;
+          STORE.setQty(p.id, v); // triggers 'cart:changed'
+        });
+
+        // remove
+        tr.querySelector('[data-remove]').addEventListener('click', () => {
+          STORE.remove(p.id); // triggers 'cart:changed'
+        });
+
+        return tr;
+      }
+
+      // Render all
+      function render(){
+        tableBody.innerHTML = '';
+        const cart = STORE.getCart();
+        const entries = Object.entries(cart);
+
+        let hasItems = false;
+        let subUSD = 0;
+
+        for(const [id, qtyRaw] of entries){
+          const p = products.find(x => x.id === id);
+          if(!p) continue;
+          const qty = Math.max(1, Number(qtyRaw) || 1);
+          hasItems = true;
+          subUSD += (Number(p.priceUSD) || 0) * qty;
+          tableBody.appendChild(renderRow(p, qty));
+        }
+
+        emptyState.style.display = hasItems ? 'none' : 'block';
+
+        const vatUSD = subUSD * VAT_RATE;
+        els.subtotal.textContent = toMoney(STORE.getCurrency(), subUSD);
+        els.vat.textContent      = toMoney(STORE.getCurrency(), vatUSD);
+        els.grand.textContent    = toMoney(STORE.getCurrency(), subUSD + vatUSD);
+        els.checkout.disabled    = !hasItems;
+      }
+
+      // Clear cart
+      els.clear.addEventListener('click', () => {
+        if (confirm('Clear all items from your cart?')) {
+          STORE.clear(); // triggers 'cart:changed'
+        }
+      });
+
+      // Re-render on store events
+      document.addEventListener('cart:changed', render);
+      document.addEventListener('currency:changed', render);
+
+      // Initial render + footer year
+      render();
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
+  </script>
+</body>
+</html>
