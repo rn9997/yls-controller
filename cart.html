@@ -3,270 +3,270 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LocalSweat — Catalog</title>
-  <meta name="description" content="Browse curated controllers, merch, and accessories at LocalSweat." />
+  <title>Your Cart — Next-Life Loot</title>
+  <meta name="description" content="Review your items, adjust quantities, and proceed to checkout." />
   <link rel="stylesheet" href="assets/styles.css" />
+
+  <!-- Page-scoped layout safety net (keeps things aligned even if global CSS differs) -->
+  <style>
+    .cart-wrap{
+      display:grid;
+      grid-template-columns: minmax(0,1fr) 320px;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .cart-wrap{ grid-template-columns: 1fr }
+      .summary{ position:static }
+    }
+    .summary{
+      position:sticky; top:90px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:linear-gradient(180deg,#0c1017,#0a0e15);
+      box-shadow:var(--shadow-md);
+    }
+    .summary .row + .row{ margin-top:8px }
+    .cart-img{
+      inline-size:64px; block-size:64px; object-fit:cover;
+      border-radius:10px; border:1px solid var(--line);
+    }
+    .qty{ width:86px }
+    .cart-actions{ white-space:nowrap }
+    .w-100{ width:100% }
+    .text-right{ text-align:right }
+    .mb-2{ margin-bottom:12px }
+    .mt-2{ margin-top:12px }
+    .mt-3{ margin-top:18px }
+    .fw-600{ font-weight:600 }
+    .muted{ color:var(--muted) }
+    .sr-only{
+      position:absolute; inline-size:1px; block-size:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
+    /* Make the table nicely scrollable on small screens */
+    .table-wrap{ overflow:auto; border-radius:12px }
+    .table th, .table td { vertical-align:middle }
+    .btn[aria-disabled="true"]{ opacity:.6; pointer-events:none }
+  </style>
 </head>
 <body>
   <!-- Header -->
   <header class="header">
-    <div class="container nav" aria-label="Primary">
-      <div class="logo"><span class="badge" aria-hidden="true">LS</span><span>LocalSweat</span></div>
+    <div class="container nav">
+      <div class="logo"><span class="badge" aria-hidden="true">✨</span>Next-Life Loot</div>
+
       <nav class="row" style="gap:10px" aria-label="Main navigation">
         <a class="btn ghost" href="index.html">Home</a>
-        <a class="btn ghost" href="catalog.html" aria-current="page">Catalog</a>
+        <a class="btn ghost" href="shop.html">Shop</a>
         <a class="btn ghost" href="contact.html">Contact</a>
-        <button class="btn" type="button" onclick="OPEN_CART?.()">
-          🛒 <span id="cartMini" aria-live="polite">0 • $0.00</span>
-        </button>
       </nav>
+
       <div class="grow" aria-hidden="true"></div>
+
       <label for="ccy" class="sr-only">Currency</label>
       <select id="ccy" class="select" style="width:auto">
-        <option>USD</option><option>BHD</option><option>EUR</option><option>GBP</option>
+        <option value="BHD">BHD د.ب</option>
+        <option value="USD">USD $</option>
+        <option value="EUR">EUR €</option>
+        <option value="GBP">GBP £</option>
       </select>
     </div>
   </header>
 
   <!-- Main -->
   <main class="container" id="main">
-    <h1 class="headline" style="margin-block:6px 12px">Catalog</h1>
+    <h1 class="headline mb-2">Your Cart</h1>
 
-    <!-- Controls -->
-    <section class="row" style="gap:10px;flex-wrap:wrap;margin-block-end:10px" aria-label="Catalog controls">
-      <!-- Tabs (keyboardable) -->
-      <div class="tabs" id="tabs" role="tablist" aria-label="Categories">
-        <button class="tab active" role="tab" aria-selected="true" data-tab="all" id="tab-all">All</button>
-        <button class="tab" role="tab" aria-selected="false" data-tab="Controllers" id="tab-controllers">Controllers</button>
-        <button class="tab" role="tab" aria-selected="false" data-tab="Merch" id="tab-merch">Merch</button>
-        <button class="tab" role="tab" aria-selected="false" data-tab="Accessories" id="tab-accessories">Accessories</button>
+    <div id="emptyState" class="notice" style="display:none">
+      <p class="small" style="margin:0">
+        Your cart is empty.
+        <a class="btn primary" href="shop.html" style="margin-inline-start:10px">Continue shopping</a>
+      </p>
+    </div>
+
+    <section class="cart-wrap mt-2">
+      <!-- Left: table -->
+      <div class="table-wrap">
+        <table class="table w-100" id="cartTable" aria-describedby="totals">
+          <colgroup>
+            <col style="width:52%">
+            <col style="width:12%">
+            <col style="width:18%">
+            <col style="width:18%">
+            <col>
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col">Qty</th>
+              <th scope="col">Price</th>
+              <th scope="col">Total</th>
+              <th scope="col"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
 
-      <div class="grow" aria-hidden="true"></div>
+      <!-- Right: summary -->
+      <aside class="pad summary" id="totals" aria-live="polite">
+        <div class="row spread">
+          <span class="small">Subtotal</span>
+          <strong id="subtotal">$0.00</strong>
+        </div>
+        <div class="row spread">
+          <span class="small">VAT (demo)</span>
+          <span id="vat" class="small">$0.00</span>
+        </div>
+        <hr style="border:none;border-top:1px solid var(--line)" class="mt-2 mb-2">
+        <div class="row spread fw-600">
+          <span class="small">Total</span>
+          <strong id="grand">$0.00</strong>
+        </div>
 
-      <label for="q" class="sr-only">Search products</label>
-      <input id="q" class="input" placeholder="Search products…" autocomplete="off" inputmode="search" />
-
-      <label for="sort" class="sr-only">Sort</label>
-      <select id="sort" class="select" aria-label="Sort products">
-        <option value="popular">Popular</option>
-        <option value="price-asc">Price ↑</option>
-        <option value="price-desc">Price ↓</option>
-        <option value="name">Name</option>
-      </select>
-    </section>
-
-    <!-- Grid -->
-    <section aria-live="polite" aria-busy="true">
-      <div id="grid" class="auto-grid" style="min-height:160px">
-        <!-- Skeletons while loading -->
-        <div class="skeleton" style="inline-size:100%;block-size:180px"></div>
-        <div class="skeleton" style="inline-size:100%;block-size:180px"></div>
-        <div class="skeleton" style="inline-size:100%;block-size:180px"></div>
-      </div>
-      <p id="empty" class="small center notice" style="display:none;margin-top:14px">No items match your filters.</p>
+        <div class="row mt-3" style="gap:8px">
+          <button class="btn ghost w-100" id="clearCart">Clear cart</button>
+          <!-- If you already have checkout.html, this becomes a link; otherwise JS will alert -->
+          <a class="btn primary w-100" id="checkout" href="checkout.html" aria-disabled="true">Checkout</a>
+        </div>
+        <p class="small muted mt-2">Payments coming soon (Stripe / PayPal / Tabby).</p>
+      </aside>
     </section>
   </main>
 
   <!-- Footer -->
-  <footer class="footer">© <span id="year"></span> LocalSweat</footer>
+  <footer class="footer">© <span id="year"></span> Next-Life Loot</footer>
 
-  <!-- App + Page Logic -->
+  <!-- App script -->
   <script src="assets/app.js"></script>
   <script>
-  (async function CatalogPage(){
-    // Header bindings (currency + mini cart)
-    bindHeader?.();
+    (async function initCartPage(){
+      bindHeader?.();
 
-    // Helpers
-    const $ = sel => document.querySelector(sel);
-    const $$ = sel => Array.from(document.querySelectorAll(sel));
-    const grid = $('#grid');
-    const emptyEl = $('#empty');
-    const qInput = $('#q');
-    const sortSel = $('#sort');
-    const tabs = $('#tabs');
+      const products = await loadProducts();
+      const tbody = document.querySelector('#cartTable tbody');
+      const emptyState = document.getElementById('emptyState');
 
-    // State with URL sync
-    const url = new URL(location.href);
-    let state = {
-      tab:   url.searchParams.get('tab')   || 'all',
-      q:     url.searchParams.get('q')     || '',
-      sort:  url.searchParams.get('sort')  || 'popular'
-    };
+      const els = {
+        subtotal: document.getElementById('subtotal'),
+        vat:      document.getElementById('vat'),
+        grand:    document.getElementById('grand'),
+        clear:    document.getElementById('clearCart'),
+        checkout: document.getElementById('checkout'),
+      };
 
-    // Reflect initial UI
-    qInput.value = state.q;
-    sortSel.value = state.sort;
-    // activate tab
-    setActiveTab(state.tab);
+      const VAT_RATE = 0.00; // set a real rate per region if needed
 
-    // Load products
-    const products = await loadProducts();
-    $('#main').setAttribute('aria-busy', 'false');
+      // Render a single row
+      function renderRow(p, qty){
+        const tr = document.createElement('tr');
+        const priceUSD = Number(p.priceUSD) || 0;
+        const q = Math.max(1, Number(qty) || 1);
+        const lineUSD = priceUSD * q;
 
-    // Derived helpers
-    const norm = s => (s||'').toLowerCase();
-    const byName = (a,b) => a.name.localeCompare(b.name, undefined, { sensitivity:'base' });
-
-    // Stable sort wrapper
-    function stableSort(arr, cmp){
-      return arr
-        .map((v,i)=>({v,i}))
-        .sort((a,b)=>cmp(a.v,b.v) || a.i - b.i)
-        .map(x=>x.v);
-    }
-
-    // Render card
-    function cardHTML(p){
-      const price = toMoney(STORE.getCurrency(), p.priceUSD);
-      const tags = (p.tags||[]).slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('');
-      return `
-        <article class="card reveal">
-          <a href="product.html?id=${encodeURIComponent(p.id)}" aria-label="${p.name}">
-            <div class="pimg">
-              <img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async">
-            </div>
-          </a>
-          <div class="pad">
-            <h3 class="ptitle clamp-2">${p.name}</h3>
-            <p class="pmeta clamp-2">${p.notes || ''}</p>
-            <div class="row" style="gap:6px;margin-top:8px">${tags}</div>
-            <div class="row spread" style="margin-top:10px">
-              <strong class="price">${price}</strong>
-              <div class="row" style="gap:6px">
-                <a class="btn ghost" href="product.html?id=${encodeURIComponent(p.id)}">Details</a>
-                <button class="btn primary" data-add="${p.id}" aria-label="Add ${p.name} to cart">Add</button>
+        tr.innerHTML = `
+          <td>
+            <div class="row" style="gap:10px">
+              <img class="cart-img" src="${p.img}" alt="${p.name}">
+              <div>
+                <div class="fw-600">${p.name}</div>
+                <div class="small muted">${p.condition || ''}</div>
               </div>
             </div>
-          </div>
-        </article>`;
-    }
+          </td>
+          <td>
+            <label class="sr-only" for="qty-${p.id}">Quantity for ${p.name}</label>
+            <input id="qty-${p.id}" type="number" min="1" value="${q}" class="input qty" inputmode="numeric" pattern="[0-9]*">
+          </td>
+          <td data-price>${toMoney(STORE.getCurrency(), priceUSD)}</td>
+          <td data-line>${toMoney(STORE.getCurrency(), lineUSD)}</td>
+          <td class="cart-actions">
+            <button class="btn ghost" data-remove>Remove</button>
+          </td>
+        `;
 
-    // Filter + sort + render
-    function apply(){
-      // Update URL (no reload)
-      const u = new URL(location.href);
-      state.q ? u.searchParams.set('q', state.q) : u.searchParams.delete('q');
-      state.sort !== 'popular' ? u.searchParams.set('sort', state.sort) : u.searchParams.delete('sort');
-      state.tab !== 'all' ? u.searchParams.set('tab', state.tab) : u.searchParams.delete('tab');
-      history.replaceState(null, '', u);
+        // qty change
+        tr.querySelector('.qty').addEventListener('change', (e) => {
+          const v = Math.max(1, Number(e.target.value) || 1);
+          e.target.value = v;
+          STORE.setQty(p.id, v); // -> triggers 'cart:changed'
+        });
 
-      let items = products.filter(p => {
-        const inTab = state.tab === 'all' ? true : p.category === state.tab;
-        const txt = norm(p.name + ' ' + (p.notes||'') + ' ' + (p.tags||[]).join(' '));
-        const matchesQ = state.q ? txt.includes(norm(state.q)) : true;
-        return inTab && matchesQ;
+        // remove
+        tr.querySelector('[data-remove]').addEventListener('click', () => {
+          STORE.remove(p.id); // -> triggers 'cart:changed'
+        });
+
+        return tr;
+      }
+
+      function computeAndRender(){
+        // Build rows
+        tbody.innerHTML = '';
+        const cart = STORE.getCart();
+        const entries = Object.entries(cart);
+
+        let subUSD = 0;
+        let count = 0;
+
+        for(const [id, qtyRaw] of entries){
+          const p = products.find(x => x.id === id);
+          if(!p) continue;
+          const q = Math.max(1, Number(qtyRaw) || 1);
+          count += q;
+          subUSD += (Number(p.priceUSD) || 0) * q;
+          tbody.appendChild(renderRow(p, q));
+        }
+
+        const hasItems = count > 0;
+        emptyState.style.display = hasItems ? 'none' : 'block';
+
+        const vatUSD = subUSD * VAT_RATE;
+        els.subtotal.textContent = toMoney(STORE.getCurrency(), subUSD);
+        els.vat.textContent      = toMoney(STORE.getCurrency(), vatUSD);
+        els.grand.textContent    = toMoney(STORE.getCurrency(), subUSD + vatUSD);
+
+        // Enable/disable checkout
+        els.checkout.setAttribute('aria-disabled', hasItems ? 'false' : 'true');
+        if(!hasItems){
+          // keep href for SEO but block click
+          els.checkout.addEventListener('click', preventIfDisabledOnce, { once: true });
+        }
+      }
+
+      function preventIfDisabledOnce(e){
+        if (els.checkout.getAttribute('aria-disabled') === 'true'){
+          e.preventDefault();
+          alert('Your cart is empty.');
+        }
+      }
+
+      // Clear cart
+      els.clear.addEventListener('click', () => {
+        if (confirm('Clear all items from your cart?')) {
+          STORE.clear(); // -> triggers 'cart:changed'
+        }
       });
 
-      // Sort
-      if(state.sort === 'price-asc')  items = stableSort(items, (a,b)=> a.priceUSD - b.priceUSD);
-      if(state.sort === 'price-desc') items = stableSort(items, (a,b)=> b.priceUSD - a.priceUSD);
-      if(state.sort === 'name')       items = stableSort(items, byName);
-      // "popular" = as-provided (assume pre-ranked) so no extra sort
-
-      // Render
-      emptyEl.style.display = items.length ? 'none' : 'block';
-      if(!items.length){ grid.innerHTML = ''; return; }
-
-      const frag = document.createDocumentFragment();
-      // build in a detached container for speed
-      const wrap = document.createElement('div');
-      wrap.className = 'auto-grid';
-      wrap.innerHTML = items.map(cardHTML).join('');
-      frag.appendChild(wrap);
-
-      // swap in one go (reduces layout trashing)
-      grid.replaceWith(frag.firstElementChild);
-      // rebind grid reference
-      const newGrid = document.querySelector('.auto-grid');
-      newGrid.id = 'grid';
-
-      // Add-to-cart bindings (event delegation)
-      newGrid.addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-add]');
-        if(!btn) return;
-        const id = btn.getAttribute('data-add');
-        const item = products.find(x => x.id === id);
-        if(!item) return;
-        STORE.add(id, 1);
-        // optional toast
-        showToast(`${item.name} added to cart`);
-      }, { once: true }); // bind once per render batch
-    }
-
-    // Debounce for search
-    const debounce = (fn, ms=180) => {
-      let t; return (...args) => { clearTimeout(t); t = setTimeout(()=>fn(...args), ms); };
-    };
-
-    // Tabs: click + keyboard
-    tabs.addEventListener('click', (e)=>{
-      const btn = e.target.closest('.tab'); if(!btn) return;
-      setActiveTab(btn.dataset.tab);
-      state.tab = btn.dataset.tab;
-      apply();
-    });
-    tabs.addEventListener('keydown', (e)=>{
-      const keys = ['ArrowRight','ArrowLeft','Home','End'];
-      if(!keys.includes(e.key)) return;
-      e.preventDefault();
-      const list = $$('#tabs .tab');
-      const cur = list.findIndex(b => b.classList.contains('active'));
-      let next = cur;
-      if(e.key==='ArrowRight') next = (cur+1) % list.length;
-      if(e.key==='ArrowLeft')  next = (cur-1+list.length) % list.length;
-      if(e.key==='Home')       next = 0;
-      if(e.key==='End')        next = list.length-1;
-      list[next].click();
-      list[next].focus();
-    });
-
-    // Search + sort handlers
-    qInput.addEventListener('input', debounce(e => { state.q = e.target.value.trim(); apply(); }, 150));
-    sortSel.addEventListener('change', e => { state.sort = e.target.value; apply(); });
-
-    // Currency reacts
-    document.addEventListener('currency:changed', apply);
-
-    // Initial paint
-    apply();
-
-    // Footer year
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // -------- helpers --------
-    function setActiveTab(name){
-      $$('#tabs .tab').forEach(b=>{
-        const active = b.dataset.tab === name;
-        b.classList.toggle('active', active);
-        b.setAttribute('aria-selected', String(active));
+      // If checkout.html doesn’t exist yet, keep a graceful fallback
+      els.checkout.addEventListener('click', (e) => {
+        if (els.checkout.getAttribute('aria-disabled') === 'true') return; // blocked above
+        // If you don't have a checkout page yet, comment the next line and use alert instead.
+        // window.location.href = els.checkout.getAttribute('href');
+        // Fallback alert (remove once real checkout exists)
+        // e.preventDefault();
+        // alert('Checkout coming soon. Integrations: Stripe/PayPal/Tabby.');
       });
-    }
 
-    // tiny toast
-    function showToast(msg){
-      const t = document.createElement('div');
-      t.className = 'toast';
-      t.role = 'status';
-      t.textContent = msg;
-      document.body.appendChild(t);
-      setTimeout(()=>{ t.style.opacity = '0'; }, 1400);
-      setTimeout(()=>{ t.remove(); }, 1800);
-    }
+      // Re-render on store/currency events
+      document.addEventListener('cart:changed', computeAndRender);
+      document.addEventListener('currency:changed', computeAndRender);
 
-    // Handle navigation back/forward restoring state
-    window.addEventListener('popstate', ()=>{
-      const u = new URL(location.href);
-      state.tab  = u.searchParams.get('tab')  || 'all';
-      state.q    = u.searchParams.get('q')    || '';
-      state.sort = u.searchParams.get('sort') || 'popular';
-      qInput.value = state.q;
-      sortSel.value = state.sort;
-      setActiveTab(state.tab);
-      apply();
-    });
-  })();
+      // Initial render + footer year
+      computeAndRender();
+      document.getElementById('year').textContent = new Date().getFullYear();
+    })();
   </script>
 </body>
 </html>
