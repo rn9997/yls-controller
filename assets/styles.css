@@ -1,7 +1,7 @@
 /* =========================================================
-   LOCAL SWEAT — PRO GAMER STORE THEME (v5 ULTRA)
-   Philosophy: fast, legible, neon-elegant. Zero cruft.
-   Stack: CSS Layers + Tokens + Container Queries + A11y++
+   LOCAL SWEAT — PRO GAMER STORE THEME (v6 PRO)
+   Goals: pixel crisp, a11y-first, buttery motion, zero cruft.
+   Stack: CSS Layers • Tokens • Container Queries • :has() • Forced Colors
    ========================================================= */
 
 @layer reset, tokens, base, theme, components, utilities;
@@ -10,12 +10,13 @@
 @layer reset {
   *,*::before,*::after{ box-sizing:border-box }
   html,body{ block-size:100% }
-  html{ -webkit-text-size-adjust:100% }
+  html{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
   body{ margin:0 }
-  :where(img,svg,video,canvas){ display:block; max-inline-size:100%; block-size:auto }
+  :where(img,svg,video,canvas){ display:block; max-inline-size:100%; block-size:auto; background:transparent }
   :where(button,input,select,textarea){ font:inherit; color:inherit }
   :where(a){ color:inherit; text-decoration:none }
   :where(ul,ol){ margin:0; padding:0; list-style:none }
+  :where(hr){ border:0; border-block-start:1px solid rgba(255,255,255,.08); margin:0 }
 }
 
 /* ---------------------- Tokens ---------------------- */
@@ -48,10 +49,10 @@
     --glowB:0 0 0 2px rgba(167,109,255,.32), 0 0 26px rgba(255,58,136,.18);
 
     /* Motion */
-    --dur-1:.12s; --dur-2:.22s; --dur-3:.4s;
+    --dur-0:.08s; --dur-1:.12s; --dur-2:.22s; --dur-3:.40s;
     --e-out:cubic-bezier(.2,.7,.2,1); --e-in:cubic-bezier(.4,0,.2,1);
 
-    /* Fluid spacing */
+    /* Rhythm */
     --s-1:clamp(6px,0.35vw + 4px,8px);
     --s-2:clamp(10px,0.5vw + 6px,12px);
     --s-3:clamp(14px,0.7vw + 8px,16px);
@@ -71,9 +72,12 @@
     /* Layout */
     --wrap:max(18px, 4vw);
     --container:1200px;
+
+    /* Z-index scale */
+    --z-nav:60; --z-overlay:55; --z-modal:70;
   }
 
-  /* Density knobs (opt-in): <body data-density="cozy|compact"> */
+  /* Density knobs (opt-in on <body>): data-density="cozy|compact" */
   [data-density="cozy"]{ --ctl-py:12px; --ctl-px:16px }
   [data-density="compact"]{ --ctl-py:8px; --ctl-px:12px }
 
@@ -141,7 +145,7 @@
 /* ---------------------- Theme ---------------------- */
 @layer theme {
   .header{
-    position:sticky; inset-block-start:0; z-index:60;
+    position:sticky; inset-block-start:0; z-index:var(--z-nav);
     backdrop-filter:blur(12px);
     background:linear-gradient(180deg, rgba(6,8,12,.85), rgba(6,8,12,.6));
     border-block-end:1px solid var(--line);
@@ -173,6 +177,7 @@
     background:var(--bgBtn); color:var(--text);
     cursor:pointer;
     transition:transform var(--dur-1) var(--e-out), box-shadow var(--dur-2) var(--e-out), border-color var(--dur-2), background var(--dur-2), filter var(--dur-2);
+    will-change:transform;
   }
   .btn:hover{ transform:translateY(-1px); border-color:#2c3749; box-shadow:var(--glowA) }
   .btn:active{ transform:translateY(0) }
@@ -231,7 +236,6 @@
     will-change:transform;
     container-type:inline-size;
   }
-  /* Fancy hover when card has image + CTA */
   .card:has(.pimg img):hover{ transform:translateY(-6px); border-color:#3a445c; box-shadow:0 32px 90px rgba(0,0,0,.6), var(--glowA) }
   .card.pad{ padding:16px }
 
@@ -311,7 +315,7 @@
   /* Drawer (Mini cart) */
   .overlay{
     position:fixed; inset:0; background:rgba(0,0,0,.45);
-    backdrop-filter:blur(2px); opacity:0; pointer-events:none; transition:opacity var(--dur-2); z-index:55;
+    backdrop-filter:blur(2px); opacity:0; pointer-events:none; transition:opacity var(--dur-2); z-index:var(--z-overlay);
   }
   .overlay.show{ opacity:1; pointer-events:auto }
 
@@ -319,7 +323,7 @@
     position:fixed; inset-block:0; inset-inline-end:-420px;
     inline-size:min(380px,100%); block-size:100%;
     background:linear-gradient(180deg,#0c1017,#0a0e15);
-    border-inline-start:1px solid var(--line); transition:inset-inline-end .28s var(--e-out); z-index:60;
+    border-inline-start:1px solid var(--line); transition:inset-inline-end .28s var(--e-out); z-index:var(--z-nav);
     display:flex; flex-direction:column; box-shadow:var(--shadow-md);
   }
   .drawer.open{ inset-inline-end:0 }
@@ -364,7 +368,7 @@
     text-align:center; color:var(--muted); padding:18px;
   }
 
-  /* Tooltips (simple) */
+  /* Tooltips */
   [data-tooltip]{ position:relative }
   [data-tooltip]::after{
     content:attr(data-tooltip); position:absolute; inset-block-end:calc(100% + 8px); inset-inline-start:50%;
@@ -379,12 +383,12 @@
   .toast{
     position:fixed; inset-inline:50%; inset-block-end:24px; translate:-50% 0;
     background:linear-gradient(180deg,#0f1524,#0b111c); border:1px solid var(--line);
-    color:var(--text); padding:10px 14px; border-radius:12px; box-shadow:var(--shadow-sm); z-index:70;
+    color:var(--text); padding:10px 14px; border-radius:12px; box-shadow:var(--shadow-sm); z-index:var(--z-modal);
   }
 
-  /* Modal shell (opt-in) */
+  /* Modal */
   .modal{
-    position:fixed; inset:0; display:grid; place-items:center; z-index:70;
+    position:fixed; inset:0; display:grid; place-items:center; z-index:var(--z-modal);
     background:rgba(0,0,0,.55); backdrop-filter:blur(3px); opacity:0; pointer-events:none; transition:opacity var(--dur-2);
   }
   .modal.show{ opacity:1; pointer-events:auto }
@@ -419,7 +423,7 @@
     .card:hover{ transform:none; box-shadow:var(--shadow-lg) }
   }
 
-  /* Container query: condense card content on small cards */
+  /* Container query fine-tuning */
   @container (max-width: 320px){
     .ptitle{ font-size:15px }
     .pmeta{ font-size:12px }
@@ -447,16 +451,25 @@
     overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
   }
 
+  /* Auto grid utility (drop-in) */
+  .auto-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+    gap:18px;
+  }
+
   /* Responsive tweaks */
   @media (max-width:520px){
     .container{ padding-inline:16px }
     .btn{ padding:9px 12px }
-    .grid{ gap:14px }
+    .grid,.auto-grid{ gap:14px }
     .ptitle{ font-size:16px }
   }
-}
-<link rel="stylesheet" href="style.css">
 
+  /* Enter animations (tiny, tasteful) */
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(6px) } to{ opacity:1; transform:none } }
+  .reveal{ animation:fadeUp var(--dur-3) var(--e-out) both }
+}
 
 /* ---------------------- Notes ----------------------
 - Badges: <span class="badge hot">Limited</span> / <span class="badge ok">In stock</span>
