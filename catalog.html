@@ -1,69 +1,272 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LocalSweat — Catalog</title>
-<link rel="stylesheet" href="assets/styles.css">
-</head><body>
-<header class="header"><div class="container nav">
-  <div class="logo"><span class="mark">LS</span>LocalSweat</div>
-  <nav class="row" style="gap:10px"><a class="btn ghost" href="index.html">Home</a><a class="btn ghost" href="catalog.html">Catalog</a><a class="btn ghost" href="contact.html">Contact</a><a class="btn" href="cart.html">🛒 <span id="cartMini">0 • $0.00</span></a></nav>
-  <div class="grow"></div><select id="ccy" class="select"><option>USD</option><option>BHD</option><option>EUR</option><option>GBP</option></select>
-</div></header>
-
-<main class="container">
-  <h1>Catalog</h1>
-  <div class="row" style="gap:10px;flex-wrap:wrap;margin-bottom:10px">
-    <div class="tabs" id="tabs">
-      <button class="tab active" data-tab="all">All</button>
-      <button class="tab" data-tab="Controllers">Controllers</button>
-      <button class="tab" data-tab="Merch">Merch</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LocalSweat — Catalog</title>
+  <meta name="description" content="Browse curated controllers, merch, and accessories at LocalSweat." />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container nav" aria-label="Primary">
+      <div class="logo"><span class="badge" aria-hidden="true">LS</span><span>LocalSweat</span></div>
+      <nav class="row" style="gap:10px" aria-label="Main navigation">
+        <a class="btn ghost" href="index.html">Home</a>
+        <a class="btn ghost" href="catalog.html" aria-current="page">Catalog</a>
+        <a class="btn ghost" href="contact.html">Contact</a>
+        <button class="btn" type="button" onclick="OPEN_CART?.()">
+          🛒 <span id="cartMini" aria-live="polite">0 • $0.00</span>
+        </button>
+      </nav>
+      <div class="grow" aria-hidden="true"></div>
+      <label for="ccy" class="sr-only">Currency</label>
+      <select id="ccy" class="select" style="width:auto">
+        <option>USD</option><option>BHD</option><option>EUR</option><option>GBP</option>
+      </select>
     </div>
-    <div class="grow"></div>
-    <input id="q" class="input" placeholder="Search…">
-    <select id="sort" class="select">
-      <option value="popular">Popular</option>
-      <option value="price-asc">Price ↑</option>
-      <option value="price-desc">Price ↓</option>
-      <option value="name">Name</option>
-    </select>
-  </div>
-  <div id="grid" class="grid"></div>
-  <p id="empty" class="small" style="display:none;text-align:center;padding:18px">No items match.</p>
-</main>
+  </header>
 
-<footer class="footer">© <span id="year"></span> LocalSweat</footer>
-<script src="assets/app.js"></script>
-<script>
-(async function(){
-  bindHeader();
-  const data = await loadProducts();
-  const grid=document.getElementById('grid'), empty=document.getElementById('empty');
-  let tab='all', q='', sort='popular';
-  const ccy = ()=> STORE.getCurrency();
+  <!-- Main -->
+  <main class="container" id="main">
+    <h1 class="headline" style="margin-block:6px 12px">Catalog</h1>
 
-  function apply(){
-    grid.innerHTML='';
-    let items = data.filter(p=> (tab==='all'||p.category===tab) && (!q || (p.name+' '+p.notes).toLowerCase().includes(q)));
-    if(sort==='price-asc') items.sort((a,b)=>a.priceUSD-b.priceUSD);
-    if(sort==='price-desc') items.sort((a,b)=>b.priceUSD-a.priceUSD);
-    if(sort==='name') items.sort((a,b)=>a.name.localeCompare(b.name));
-    empty.style.display = items.length? 'none':'block';
-    for(const p of items){
-      const card=document.createElement('article'); card.className='card';
-      card.innerHTML=`
-        <a href="product.html?id=${p.id}"><div class="pimg"><img src="${p.img}" alt="${p.name}"></div></a>
-        <div class="pad"><div class="ptitle">${p.name}</div><div class="pmeta">${p.notes}</div>
-        <div class="row spread" style="margin-top:8px"><strong>${toMoney(ccy(), p.priceUSD)}</strong>
-        <div class="row" style="gap:6px"><a class="btn ghost" href="product.html?id=${p.id}">Details</a><button class="btn primary" data-add="${p.id}">Add</button></div></div></div>`;
-      card.querySelector('[data-add]').onclick=()=>STORE.add(p.id,1);
-      grid.appendChild(card);
+    <!-- Controls -->
+    <section class="row" style="gap:10px;flex-wrap:wrap;margin-block-end:10px" aria-label="Catalog controls">
+      <!-- Tabs (keyboardable) -->
+      <div class="tabs" id="tabs" role="tablist" aria-label="Categories">
+        <button class="tab active" role="tab" aria-selected="true" data-tab="all" id="tab-all">All</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="Controllers" id="tab-controllers">Controllers</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="Merch" id="tab-merch">Merch</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="Accessories" id="tab-accessories">Accessories</button>
+      </div>
+
+      <div class="grow" aria-hidden="true"></div>
+
+      <label for="q" class="sr-only">Search products</label>
+      <input id="q" class="input" placeholder="Search products…" autocomplete="off" inputmode="search" />
+
+      <label for="sort" class="sr-only">Sort</label>
+      <select id="sort" class="select" aria-label="Sort products">
+        <option value="popular">Popular</option>
+        <option value="price-asc">Price ↑</option>
+        <option value="price-desc">Price ↓</option>
+        <option value="name">Name</option>
+      </select>
+    </section>
+
+    <!-- Grid -->
+    <section aria-live="polite" aria-busy="true">
+      <div id="grid" class="auto-grid" style="min-height:160px">
+        <!-- Skeletons while loading -->
+        <div class="skeleton" style="inline-size:100%;block-size:180px"></div>
+        <div class="skeleton" style="inline-size:100%;block-size:180px"></div>
+        <div class="skeleton" style="inline-size:100%;block-size:180px"></div>
+      </div>
+      <p id="empty" class="small center notice" style="display:none;margin-top:14px">No items match your filters.</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">© <span id="year"></span> LocalSweat</footer>
+
+  <!-- App + Page Logic -->
+  <script src="assets/app.js"></script>
+  <script>
+  (async function CatalogPage(){
+    // Header bindings (currency + mini cart)
+    bindHeader?.();
+
+    // Helpers
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+    const grid = $('#grid');
+    const emptyEl = $('#empty');
+    const qInput = $('#q');
+    const sortSel = $('#sort');
+    const tabs = $('#tabs');
+
+    // State with URL sync
+    const url = new URL(location.href);
+    let state = {
+      tab:   url.searchParams.get('tab')   || 'all',
+      q:     url.searchParams.get('q')     || '',
+      sort:  url.searchParams.get('sort')  || 'popular'
+    };
+
+    // Reflect initial UI
+    qInput.value = state.q;
+    sortSel.value = state.sort;
+    // activate tab
+    setActiveTab(state.tab);
+
+    // Load products
+    const products = await loadProducts();
+    $('#main').setAttribute('aria-busy', 'false');
+
+    // Derived helpers
+    const norm = s => (s||'').toLowerCase();
+    const byName = (a,b) => a.name.localeCompare(b.name, undefined, { sensitivity:'base' });
+
+    // Stable sort wrapper
+    function stableSort(arr, cmp){
+      return arr
+        .map((v,i)=>({v,i}))
+        .sort((a,b)=>cmp(a.v,b.v) || a.i - b.i)
+        .map(x=>x.v);
     }
-  }
-  document.getElementById('q').oninput=e=>{ q=e.target.value.toLowerCase(); apply(); };
-  document.getElementById('sort').onchange=e=>{ sort=e.target.value; apply(); };
-  document.getElementById('tabs').onclick=e=>{ if(e.target.matches('.tab')){ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active')); e.target.classList.add('active'); tab=e.target.dataset.tab; apply(); } };
-  document.addEventListener('currency:changed', apply);
-  apply();
-  document.getElementById('year').textContent = new Date().getFullYear();
-})();
-</script>
-</body></html>
+
+    // Render card
+    function cardHTML(p){
+      const price = toMoney(STORE.getCurrency(), p.priceUSD);
+      const tags = (p.tags||[]).slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('');
+      return `
+        <article class="card reveal">
+          <a href="product.html?id=${encodeURIComponent(p.id)}" aria-label="${p.name}">
+            <div class="pimg">
+              <img src="${p.img}" alt="${p.name}" loading="lazy" decoding="async">
+            </div>
+          </a>
+          <div class="pad">
+            <h3 class="ptitle clamp-2">${p.name}</h3>
+            <p class="pmeta clamp-2">${p.notes || ''}</p>
+            <div class="row" style="gap:6px;margin-top:8px">${tags}</div>
+            <div class="row spread" style="margin-top:10px">
+              <strong class="price">${price}</strong>
+              <div class="row" style="gap:6px">
+                <a class="btn ghost" href="product.html?id=${encodeURIComponent(p.id)}">Details</a>
+                <button class="btn primary" data-add="${p.id}" aria-label="Add ${p.name} to cart">Add</button>
+              </div>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    // Filter + sort + render
+    function apply(){
+      // Update URL (no reload)
+      const u = new URL(location.href);
+      state.q ? u.searchParams.set('q', state.q) : u.searchParams.delete('q');
+      state.sort !== 'popular' ? u.searchParams.set('sort', state.sort) : u.searchParams.delete('sort');
+      state.tab !== 'all' ? u.searchParams.set('tab', state.tab) : u.searchParams.delete('tab');
+      history.replaceState(null, '', u);
+
+      let items = products.filter(p => {
+        const inTab = state.tab === 'all' ? true : p.category === state.tab;
+        const txt = norm(p.name + ' ' + (p.notes||'') + ' ' + (p.tags||[]).join(' '));
+        const matchesQ = state.q ? txt.includes(norm(state.q)) : true;
+        return inTab && matchesQ;
+      });
+
+      // Sort
+      if(state.sort === 'price-asc')  items = stableSort(items, (a,b)=> a.priceUSD - b.priceUSD);
+      if(state.sort === 'price-desc') items = stableSort(items, (a,b)=> b.priceUSD - a.priceUSD);
+      if(state.sort === 'name')       items = stableSort(items, byName);
+      // "popular" = as-provided (assume pre-ranked) so no extra sort
+
+      // Render
+      emptyEl.style.display = items.length ? 'none' : 'block';
+      if(!items.length){ grid.innerHTML = ''; return; }
+
+      const frag = document.createDocumentFragment();
+      // build in a detached container for speed
+      const wrap = document.createElement('div');
+      wrap.className = 'auto-grid';
+      wrap.innerHTML = items.map(cardHTML).join('');
+      frag.appendChild(wrap);
+
+      // swap in one go (reduces layout trashing)
+      grid.replaceWith(frag.firstElementChild);
+      // rebind grid reference
+      const newGrid = document.querySelector('.auto-grid');
+      newGrid.id = 'grid';
+
+      // Add-to-cart bindings (event delegation)
+      newGrid.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-add]');
+        if(!btn) return;
+        const id = btn.getAttribute('data-add');
+        const item = products.find(x => x.id === id);
+        if(!item) return;
+        STORE.add(id, 1);
+        // optional toast
+        showToast(`${item.name} added to cart`);
+      }, { once: true }); // bind once per render batch
+    }
+
+    // Debounce for search
+    const debounce = (fn, ms=180) => {
+      let t; return (...args) => { clearTimeout(t); t = setTimeout(()=>fn(...args), ms); };
+    };
+
+    // Tabs: click + keyboard
+    tabs.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.tab'); if(!btn) return;
+      setActiveTab(btn.dataset.tab);
+      state.tab = btn.dataset.tab;
+      apply();
+    });
+    tabs.addEventListener('keydown', (e)=>{
+      const keys = ['ArrowRight','ArrowLeft','Home','End'];
+      if(!keys.includes(e.key)) return;
+      e.preventDefault();
+      const list = $$('#tabs .tab');
+      const cur = list.findIndex(b => b.classList.contains('active'));
+      let next = cur;
+      if(e.key==='ArrowRight') next = (cur+1) % list.length;
+      if(e.key==='ArrowLeft')  next = (cur-1+list.length) % list.length;
+      if(e.key==='Home')       next = 0;
+      if(e.key==='End')        next = list.length-1;
+      list[next].click();
+      list[next].focus();
+    });
+
+    // Search + sort handlers
+    qInput.addEventListener('input', debounce(e => { state.q = e.target.value.trim(); apply(); }, 150));
+    sortSel.addEventListener('change', e => { state.sort = e.target.value; apply(); });
+
+    // Currency reacts
+    document.addEventListener('currency:changed', apply);
+
+    // Initial paint
+    apply();
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // -------- helpers --------
+    function setActiveTab(name){
+      $$('#tabs .tab').forEach(b=>{
+        const active = b.dataset.tab === name;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', String(active));
+      });
+    }
+
+    // tiny toast
+    function showToast(msg){
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.role = 'status';
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(()=>{ t.style.opacity = '0'; }, 1400);
+      setTimeout(()=>{ t.remove(); }, 1800);
+    }
+
+    // Handle navigation back/forward restoring state
+    window.addEventListener('popstate', ()=>{
+      const u = new URL(location.href);
+      state.tab  = u.searchParams.get('tab')  || 'all';
+      state.q    = u.searchParams.get('q')    || '';
+      state.sort = u.searchParams.get('sort') || 'popular';
+      qInput.value = state.q;
+      sortSel.value = state.sort;
+      setActiveTab(state.tab);
+      apply();
+    });
+  })();
+  </script>
+</body>
+</html>
